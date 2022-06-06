@@ -27,14 +27,14 @@ namespace lnxLang.Utils
             Console.WriteLine("[Error] " + message);
         }
 
-        public static void Error(string message, int line)
+        public static void Error(string message, int position)
         {
-            Error("[Error] " + message + " in line " + line);
+            Error(message + " in line " + position);
         }
 
-        public static void Error(string message, int line, string code)
+        public static void Error(string message, int position, string code)
         {
-            Error("[Error] " + message + " in line " + line + " at: " + code);
+            Error(message + " in line " + position + " at: " + code);
         }
 
     }
