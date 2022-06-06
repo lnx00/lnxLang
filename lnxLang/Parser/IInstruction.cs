@@ -9,7 +9,5 @@ namespace lnxLang.Parser
     internal interface IInstruction
     {
 
-        bool Execute();
-
     }
 }

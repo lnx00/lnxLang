@@ -8,5 +8,8 @@ namespace lnxLang.Parser
 {
     internal class ParseResult
     {
+
+        public List<IInstruction> Instructions;
+
     }
 }

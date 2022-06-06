@@ -8,18 +8,20 @@ namespace lnxLang.Parser.Instructions
 {
     internal class Declaration : IInstruction
     {
-        private string _variable;
-        private object _value;
-
-        public Declaration(string variable, object value)
+        internal enum ContentType
         {
-            _variable = variable;
-            _value = value;
+            None, String, Bool, Integer, Float
         }
 
-        public bool Execute()
+        public string Variable { get; }
+        public ContentType Type { get; }
+        public string Value { get; }
+
+        public Declaration(string variable, ContentType type, string value)
         {
-            throw new NotImplementedException();
+            Variable = variable;
+            Type = type;
+            Value = value;
         }
     }
 }

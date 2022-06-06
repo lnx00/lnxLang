@@ -18,5 +18,11 @@ namespace lnxLang.Parser
             return _program;
         }
 
+        private List<IInstruction> ParseCode(string code)
+        {
+
+            throw new NotImplementedException();
+        }
+
     }
 }
