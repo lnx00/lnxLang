@@ -90,6 +90,10 @@ namespace lnxLang.Parser
                 throw new SyntaxErrorException("Invalid syntax for declaration! Expected '=' in: " + line);
             }
             string value = reader.ReadWord();
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                throw new Exception("Variable value of '" + name + "' cannot be '" + value + "'");
+            }
 
             // Get the true variable type
             var trueType = Declaration.GetContentType(type);

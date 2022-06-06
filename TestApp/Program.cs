@@ -4,7 +4,7 @@ Console.WriteLine("Running lnxLang test...");
 
 string testCode = @"
 global a -> int = 1
-global b -> bool = false
+global b -> bool = true
 a = 3
 ";
 
