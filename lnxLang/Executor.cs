@@ -12,10 +12,12 @@ namespace lnxLang
             try
             {
                 // Parse the code to receive the instructions
+                Logger.Log("Parsing code...");
                 Parser.Parser parser = new();
                 ParseResult parseResult = parser.Parse(code);
 
                 // Execute the instructions
+                Logger.Log("Interpreting program...");
                 Interpreter.Interpreter interpreter = new();
                 return interpreter.Interprete(parseResult);
             }
