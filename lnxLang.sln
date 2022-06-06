@@ -5,6 +5,8 @@ VisualStudioVersion = 17.2.32519.379
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lnxLang", "lnxLang\lnxLang.csproj", "{059DB3D8-1A64-4969-8180-50D8E663CD42}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApp", "TestApp\TestApp.csproj", "{8C2C2C40-8E8F-47BD-B3D8-DDCDE7360BCB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{059DB3D8-1A64-4969-8180-50D8E663CD42}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{059DB3D8-1A64-4969-8180-50D8E663CD42}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{059DB3D8-1A64-4969-8180-50D8E663CD42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C2C2C40-8E8F-47BD-B3D8-DDCDE7360BCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C2C2C40-8E8F-47BD-B3D8-DDCDE7360BCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C2C2C40-8E8F-47BD-B3D8-DDCDE7360BCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C2C2C40-8E8F-47BD-B3D8-DDCDE7360BCB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

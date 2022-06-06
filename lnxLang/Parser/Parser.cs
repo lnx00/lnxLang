@@ -15,6 +15,8 @@ namespace lnxLang.Parser
         {
             _program = new ParseResult();
 
+            _program.Instructions.AddRange(ParseCode(code));
+
             return _program;
         }
 
