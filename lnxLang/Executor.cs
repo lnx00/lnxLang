@@ -9,24 +9,21 @@ namespace lnxLang
 
         public bool Evaluate(string code)
         {
-            // Parse the code to receive the instructions
-            Parser.Parser parser = new();
-            ParseResult? parseResult = parser.Parse(code);
-            if (parseResult == null)
+            try
             {
-                Logger.Error("Failed to parse program code");
+                // Parse the code to receive the instructions
+                Parser.Parser parser = new();
+                ParseResult parseResult = parser.Parse(code);
+
+                // Execute the instructions
+                Interpreter.Interpreter interpreter = new();
+                return interpreter.Interprete(parseResult);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.Message);
                 return false;
             }
-
-            // Execute the instructions
-            Interpreter.Interpreter interpreter = new();
-            if (!interpreter.Interprete(parseResult))
-            {
-                Logger.Error("Failed to interprete program");
-                return false;
-            }
-
-            return true;
         }
 
     }

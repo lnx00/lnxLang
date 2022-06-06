@@ -14,7 +14,7 @@ namespace lnxLang.Parser
 
         private ParseResult _program = new();
 
-        public ParseResult? Parse(string code)
+        public ParseResult Parse(string code)
         {
             _program = new ParseResult();
 
@@ -32,7 +32,7 @@ namespace lnxLang.Parser
             while (reader.CanRead())
             {
                 reader.SeekStart();
-                string keyword = reader.ReadWord();
+                string keyword = reader.PeekWord();
                 string line = reader.ReadLine();
 
                 switch (keyword)
@@ -60,6 +60,7 @@ namespace lnxLang.Parser
             Logger.Log("Parsing global declaration...");
             Reader reader = new(line);
 
+            string scope = reader.ReadWord();
             string name = reader.ReadWord();
             if (reader.ReadWord() != "->")
             {
@@ -72,12 +73,21 @@ namespace lnxLang.Parser
             }
             string value = reader.ReadWord();
 
+            // Get the true variable type
             var trueType = Declaration.GetContentType(type);
             if (trueType == ContentType.None)
             {
                 throw new Exception("Invalid variable type: " + type);
             }
 
+            // Get the true access scope
+            var trueScope = Declaration.GetAccessScope(scope);
+            if (trueScope == AccessScope.None)
+            {
+                throw new Exception("Invalid access scope: " + type);
+            }
+
+            Logger.Log("Parsed " + scope + " variable " + name + " with value " + value);
             return new Declaration(name, ContentType.None, value, AccessScope.Global);
         }
 

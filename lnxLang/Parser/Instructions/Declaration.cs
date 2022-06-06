@@ -39,7 +39,17 @@ namespace lnxLang.Parser.Instructions
                 "bool" => ContentType.Bool,
                 "int" => ContentType.Integer,
                 "float" => ContentType.Float,
-                _ => ContentType.None,
+                _ => ContentType.None
+            };
+        }
+
+        public static AccessScope GetAccessScope(string scope)
+        {
+            return scope switch
+            {
+                "local" => AccessScope.Local,
+                "global" => AccessScope.Global,
+                _ => AccessScope.None
             };
         }
     }
