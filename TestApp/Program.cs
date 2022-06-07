@@ -3,9 +3,10 @@
 Console.WriteLine("Running lnxLang test...");
 
 string testCode = @"
-global a -> int = 1
-global b -> bool = true
-a = 15
+global a -> int = 1;
+global b -> bool = true;
+a = 15;
+debug Hello World;
 ";
 
 Executor executor = new Executor();

@@ -37,6 +37,12 @@ namespace lnxLang.Utils
             }
         }
 
+        /* Seeks until the given character */
+        public void SeekUntil(char end)
+        {
+            while (CanRead() && ReadChar() != end) { }
+        }
+
         /* Skips the next n characters */
         public void Skip(int n = 1)
         {
@@ -57,7 +63,7 @@ namespace lnxLang.Utils
             return result;
         }
 
-        /* Peeks the next character without changing the position */
+        /* Peeks the current character without changing the position */
         public char PeekChar()
         {
             return _text[_position];
@@ -131,6 +137,18 @@ namespace lnxLang.Utils
         public string ReadLine()
         {
             return ReadUntil("\r\n");
+        }
+
+        /* Reads until the end */
+        public string ReadAll()
+        {
+            string result = "";
+            while (CanRead())
+            {
+                result += ReadChar();
+            }
+
+            return result;
         }
 
     }

@@ -12,7 +12,7 @@ namespace lnxLang.Interpreter
 {
     internal class Interpreter
     {
-        private Memory _memory = new();
+        private readonly Memory _memory = new();
 
         public bool Interprete(ParseResult parseResult)
         {
@@ -40,6 +40,13 @@ namespace lnxLang.Interpreter
                 return DoAssignment(assignment);
             }
 
+            if (instruction is Debug debug)
+            {
+                Console.WriteLine(debug.Message);
+                return true;
+            }
+
+            Logger.Warn("Unknown instruction: " + instruction.GetType());
             return true;
         }
 
@@ -47,62 +54,6 @@ namespace lnxLang.Interpreter
         {
             IVariable newVariable = IVariable.GetFromType(declaration.Type);
             newVariable.SetValue(declaration.Value);
-
-            // Get the variable content with the correct type
-            /*switch (declaration.Type)
-            {
-                case ContentType.String:
-                {
-                    newVariable = new VString(declaration.Value);
-                    break;
-                }
-
-                case ContentType.Bool:
-                {
-                    if (bool.TryParse(declaration.Value, out var boolValue))
-                    {
-                        newVariable = new VBoolean(boolValue);
-                    }
-                    else
-                    {
-                        throw new Exception("Failed to parse boolean value: " + declaration.Value);
-                    }
-
-                    break;
-                }
-
-                case ContentType.Integer:
-                {
-                    if (int.TryParse(declaration.Value, out var intValue))
-                    {
-                        newVariable = new VInteger(intValue);
-                    }
-                    else
-                    {
-                        throw new Exception("Failed to parse integer value: " + declaration.Value);
-                    }
-
-                    break;
-                }
-
-                case ContentType.Float:
-                {
-                    if (float.TryParse(declaration.Value, out var floatValue))
-                    {
-                        newVariable = new VFloat(floatValue);
-                    }
-                    else
-                    {
-                        throw new Exception("Failed to parse float value: " + declaration.Value);
-                    }
-                    break;
-                }
-
-                default:
-                {
-                    throw new Exception("Invalid variable content type for: " + declaration.Variable);
-                }
-            }*/
 
             // TODO: Respect scope
 

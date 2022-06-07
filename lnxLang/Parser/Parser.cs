@@ -34,22 +34,32 @@ namespace lnxLang.Parser
             // Read the entire code
             while (reader.CanRead())
             {
-                reader.SeekStart();
-                string keyword = reader.PeekWord();
-                string line = reader.ReadLine();
-
+                reader.SeekStart();                 // Go to current line start
+                string keyword = reader.PeekWord(); // Peek the next word (Keyword)
                 if (keyword == string.Empty)
                 {
                     Logger.Warn("Skipping empty keyword");
                     continue;
                 }
 
+                string line = reader.ReadUntil(';');    // Read the current line
+
+                /* Keywords that will contain sub-code { } */
+                switch (keyword)
+                {
+                    case "if":
+                    {
+                        throw new NotImplementedException("if-statements have not been implemented");
+                    }
+                }
+
+                /* Keywords that will end with the next semicolon */
                 switch (keyword)
                 {
                     case "global":
                     case "local":
                     {
-                        instructions.Add(ParseVariable(line, localVars));
+                        instructions.Add(ParseDeclaration(line, localVars));
                         break;
                     }
 
@@ -62,6 +72,15 @@ namespace lnxLang.Parser
                                 break;
                         }
 
+                        // Check if the keyword is a method
+
+                        // Debug keywords
+                        if (keyword == "debug")
+                        {
+                            instructions.Add(ParseDebug(line));
+                            break;
+                        }
+
                         Logger.Error("Unknown keyword", reader.GetPosition(), keyword);
                         // TODO: We should return here
                         break;
@@ -72,8 +91,8 @@ namespace lnxLang.Parser
             return instructions;
         }
 
-        /* Parses a global or local variable */
-        private Declaration ParseVariable(string line, List<string> localVars)
+        /* Parses a global or local variable declaration */
+        private Declaration ParseDeclaration(string line, List<string> localVars)
         {
             Logger.Log("Parsing variable declaration...");
             Reader reader = new(line);
@@ -128,6 +147,7 @@ namespace lnxLang.Parser
             return new Declaration(name, Declaration.GetContentType(type), value, Declaration.GetAccessScope(scope));
         }
 
+        /* Parses a variable assignment */
         private Assignment ParseAssignment(string line)
         {
             Logger.Log("Parsing variable assignment...");
@@ -142,6 +162,15 @@ namespace lnxLang.Parser
 
             Logger.Log("Parsed assignment of " + variable + " with value " + value);
             return new Assignment(variable, value);
+        }
+
+        /* Parses the debug keyword */
+        private Debug ParseDebug(string line)
+        {
+            Reader reader = new(line);
+            reader.ReadWord();
+
+            return new Debug(reader.ReadAll());
         }
 
     }
