@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using lnxLang.Parser.Instructions;
 using lnxLang.Utils;
@@ -65,6 +66,8 @@ namespace lnxLang.Parser
                         List<IInstruction> bodyInstructions = ParseCode(body, parentVars);
                         instructions.Add(new Condition(statement, bodyInstructions.Count));
                         instructions.AddRange(bodyInstructions);
+
+                        Logger.Log("Parsed if-statement with condition: " + statement);
                         continue;
                     }
 
@@ -79,6 +82,8 @@ namespace lnxLang.Parser
 
                         instructions.Add(new Condition(statement, bodyInstructions.Count));
                         instructions.AddRange(bodyInstructions);
+
+                        Logger.Log("Parsed while-loop with condition: " + statement);
                         continue;
                     }
                 }
@@ -97,20 +102,24 @@ namespace lnxLang.Parser
 
                 /* Other keywords */
 
-                // Check if the keyword is a know variable
+                // Debug keywords
+                if (keyword == "debug")
+                {
+                    instructions.Add(ParseDebug(line));
+                    continue;
+                }
+
+                // Check if the keyword is a known variable
                 if (_globalVars.Contains(keyword) || localVars.Contains(keyword))
                 {
                     instructions.Add(ParseAssignment(line));
                     continue;
                 }
 
-                // Check if the keyword is a method
-                // TODO
-
-                // Debug keywords
-                if (keyword == "debug")
+                // Check if the keyword is a method | TODO: Move the regex stuff to an Analyzer
+                if (Regex.IsMatch(line, @"\S+\(.*\)"))
                 {
-                    instructions.Add(ParseDebug(line));
+                    instructions.Add(ParseCall(line));
                     continue;
                 }
 
@@ -172,7 +181,7 @@ namespace lnxLang.Parser
                 }
             }
 
-            Logger.Log("Parsed " + scope + " variable " + name + " with value " + value);
+            Logger.Log("Parsed " + scope + " variable " + name + " with value: " + value);
             return new Declaration(name, Declaration.GetContentType(type), value, Declaration.GetAccessScope(scope));
         }
 
@@ -189,8 +198,20 @@ namespace lnxLang.Parser
             }
             string value = reader.ReadAll();
 
-            Logger.Log("Parsed assignment of " + variable + " with value " + value);
+            Logger.Log("Parsed assignment of " + variable + " with value: " + value);
             return new Assignment(variable, value);
+        }
+
+        private Call ParseCall(string line)
+        {
+            Reader reader = new(line);
+            string path = reader.ReadUntil('(');
+            string args = reader.ReadStack('(', ')');
+
+            string[] pathArray = path.Split('.');
+            string[] argArray = args.Split(',');
+
+            return new Call(pathArray, argArray);
         }
 
         /* Parses the debug keyword */

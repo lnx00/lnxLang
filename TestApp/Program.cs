@@ -9,9 +9,9 @@ global b -> int = 0;
 while (a > 0) {
     b = b + 5;
     a = a - 1;
-    debug DUMP;
 }
 
+Console.Log('');
 debug DUMP;
 ";
 
