@@ -11,7 +11,7 @@ namespace lnxLang.Interpreter
     internal interface IVariable
     {
         
-        void SetValue(string value);
+        void SetValue(object value);
         object GetValue();
 
         static IVariable GetFromType(ContentType type)

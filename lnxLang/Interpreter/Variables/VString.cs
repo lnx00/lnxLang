@@ -18,9 +18,9 @@ namespace lnxLang.Interpreter.Variables
             Value = value;
         }
 
-        public void SetValue(string value)
+        public void SetValue(object value)
         {
-            Value = value;
+            Value = (string)value;
         }
 
         public object GetValue()

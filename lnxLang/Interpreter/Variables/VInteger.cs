@@ -18,9 +18,16 @@ namespace lnxLang.Interpreter.Variables
             Value = value;
         }
 
-        public void SetValue(string value)
+        public void SetValue(object value)
         {
-            Value = int.Parse(value);
+            if (value is string str)
+            {
+                Value = int.Parse(str);
+            }
+            else
+            {
+                Value = (int)value;
+            }
         }
 
         public object GetValue()

@@ -64,15 +64,17 @@ namespace lnxLang.Interpreter
         {
             IVariable newVariable = IVariable.GetFromType(declaration.Type);
 
-            if (declaration.Type == ContentType.Integer || declaration.Type == ContentType.Float)
+            if (declaration.Type is ContentType.Integer or ContentType.Float or ContentType.Bool)
             {
-                Expression eval = new Expression(declaration.Value);
-                newVariable.SetValue(eval.Evaluate().ToString());
+                // Solve logical/math expression
+                Expression eval = new(declaration.Value);
+                newVariable.SetValue(eval.Evaluate());
             }
             else
             {
                 newVariable.SetValue(declaration.Value);
             }
+
             // TODO: Respect scope
 
             // Add the variable to the corresponding list

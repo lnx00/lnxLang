@@ -13,9 +13,16 @@ namespace lnxLang.Interpreter.Variables
 
         public VBoolean() { }
 
-        public void SetValue(string value)
+        public void SetValue(object value)
         {
-            Value = bool.Parse(value);
+            if (value is string str)
+            {
+                Value = bool.Parse(str);
+            }
+            else
+            {
+                Value = (bool)value;
+            }
         }
 
         public object GetValue()

@@ -7,14 +7,15 @@ global a -> int = 1;
 global b -> bool = false;
 b = true;
 
-if (b) {
+if (b)
+{
     a = 5;
     b = false;
     local c -> bool = true;
     if (c) { b = true; }
 }
 
-global d -> int = Cos(3);
+global d -> int = false ? 5 : 3;
 debug DUMP;
 ";
 
