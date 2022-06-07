@@ -42,50 +42,53 @@ namespace lnxLang.Parser
                     continue;
                 }
 
-                string line = reader.ReadUntil(';');    // Read the current line
-
                 /* Keywords that will contain sub-code { } */
                 switch (keyword)
                 {
                     case "if":
                     {
-                        throw new NotImplementedException("if-statements have not been implemented");
+                        reader.ReadWord(); // Read 'if'
+                        string statement = reader.ReadStack('(', ')'); // Read condition
+                        string body = reader.ReadStack('{', '}');
+
+                        List<IInstruction> bodyInstructions = ParseCode(body, parentVars);
+                        instructions.Add(new Condition(statement, bodyInstructions.Count));
+                        instructions.AddRange(bodyInstructions);
+                        continue;
                     }
                 }
 
                 /* Keywords that will end with the next semicolon */
+                string line = reader.ReadUntil(';'); // Read the current line
                 switch (keyword)
                 {
                     case "global":
                     case "local":
                     {
                         instructions.Add(ParseDeclaration(line, localVars));
-                        break;
-                    }
-
-                    default:
-                    {
-                        // Check if the keyword is a know variable
-                        if (_globalVars.Contains(keyword) || localVars.Contains(keyword))
-                        {
-                                instructions.Add(ParseAssignment(line));
-                                break;
-                        }
-
-                        // Check if the keyword is a method
-
-                        // Debug keywords
-                        if (keyword == "debug")
-                        {
-                            instructions.Add(ParseDebug(line));
-                            break;
-                        }
-
-                        Logger.Error("Unknown keyword", reader.GetPosition(), keyword);
-                        // TODO: We should return here
-                        break;
+                        continue;
                     }
                 }
+
+                /* Other keywords */
+                // Check if the keyword is a know variable
+                if (_globalVars.Contains(keyword) || localVars.Contains(keyword))
+                {
+                    instructions.Add(ParseAssignment(line));
+                    continue;
+                }
+
+                // Check if the keyword is a method
+                // TODO
+
+                // Debug keywords
+                if (keyword == "debug")
+                {
+                    instructions.Add(ParseDebug(line));
+                    continue;
+                }
+
+                Logger.Error("Unknown keyword", reader.GetPosition(), keyword);
             }
 
             return instructions;

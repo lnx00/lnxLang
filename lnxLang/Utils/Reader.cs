@@ -151,5 +151,26 @@ namespace lnxLang.Utils
             return result;
         }
 
+        public string ReadStack(char start, char end)
+        {
+            string result = "";
+            Stack<char> stack = new();
+            SeekUntil(start);
+            stack.Push(start);
+
+            while (CanRead())
+            {
+                char current = ReadChar();
+
+                if (current == start) { stack.Push(current); }
+                if (current == end) { stack.Pop(); }
+                if (stack.Count == 0) { break; }
+
+                result += current;
+            }
+
+            return result;
+        }
+
     }
 }
