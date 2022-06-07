@@ -125,7 +125,7 @@ namespace lnxLang.Parser
             }
 
             Logger.Log("Parsed " + scope + " variable " + name + " with value " + value);
-            return new Declaration(name, ContentType.None, value, AccessScope.Global);
+            return new Declaration(name, Declaration.GetContentType(type), value, Declaration.GetAccessScope(scope));
         }
 
         private Assignment ParseAssignment(string line)
