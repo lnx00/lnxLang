@@ -10,9 +10,9 @@ namespace lnxLang.Interpreter
 {
     internal interface IVariable
     {
-
-        public string Name { get; set; }
+        
         void SetValue(string value);
+        object GetValue();
 
         static IVariable GetFromType(ContentType type)
         {

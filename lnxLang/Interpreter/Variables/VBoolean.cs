@@ -8,8 +8,7 @@ namespace lnxLang.Interpreter.Variables
 {
     internal class VBoolean : IVariable
     {
-
-        public string Name { get; set; }
+        
         public bool Value { get; set; } = false;
 
         public VBoolean() { }
@@ -17,6 +16,11 @@ namespace lnxLang.Interpreter.Variables
         public void SetValue(string value)
         {
             Value = bool.Parse(value);
+        }
+
+        public object GetValue()
+        {
+            return Value;
         }
 
         public VBoolean(bool value)

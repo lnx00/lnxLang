@@ -52,8 +52,7 @@ namespace lnxLang.Interpreter
 
             if (instruction is Debug debug)
             {
-                Console.WriteLine(debug.Message);
-                return true;
+                return DoDebug(debug);
             }
 
             Logger.Warn("Unknown instruction: " + instruction.GetType());
@@ -94,6 +93,31 @@ namespace lnxLang.Interpreter
             if (!result)
             {
                 _currentInstruction += condition.Size;
+            }
+
+            return true;
+        }
+
+        private bool DoDebug(Debug debug)
+        {
+            switch (debug.Task)
+            {
+                case DebugTask.Dump:
+                {
+                    Logger.Log("### Variable dump ###");
+                    foreach (var variable in _memory.Variables)
+                    {
+                        Logger.Log(variable.Key + " = " + variable.Value.GetValue());
+                    }
+                    Logger.Log("#####################");
+                    break;
+                }
+
+                default:
+                {
+                    Logger.Warn("Unknown debug task");
+                    break;
+                }
             }
 
             return true;

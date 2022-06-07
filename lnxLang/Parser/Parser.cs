@@ -172,8 +172,9 @@ namespace lnxLang.Parser
         {
             Reader reader = new(line);
             reader.ReadWord();
+            string parameter = reader.ReadAll();
 
-            return new Debug(reader.ReadAll());
+            return new Debug(Debug.GetDebugTask(parameter));
         }
 
     }

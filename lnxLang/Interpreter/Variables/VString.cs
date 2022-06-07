@@ -9,7 +9,6 @@ namespace lnxLang.Interpreter.Variables
     internal class VString : IVariable
     {
 
-        public string Name { get; set; }
         public string Value { get; set; } = string.Empty;
 
         public VString() { }
@@ -22,6 +21,11 @@ namespace lnxLang.Interpreter.Variables
         public void SetValue(string value)
         {
             Value = value;
+        }
+
+        public object GetValue()
+        {
+            return Value;
         }
 
         public void Add(string b)

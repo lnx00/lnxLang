@@ -6,14 +6,29 @@ using System.Threading.Tasks;
 
 namespace lnxLang.Parser.Instructions
 {
+
+    internal enum DebugTask
+    {
+        None, Dump
+    }
+
     internal class Debug : IInstruction
     {
 
-        public string Message { get; }
+        public DebugTask Task { get; set; }
 
-        public Debug(string msg)
+        public Debug(DebugTask task)
         {
-            Message = msg;
+            Task = task;
+        }
+
+        public static DebugTask GetDebugTask(string task)
+        {
+            return task switch
+            {
+                "DUMP" => DebugTask.Dump,
+                _ => DebugTask.None
+            };
         }
 
     }

@@ -172,5 +172,26 @@ namespace lnxLang.Utils
             return result;
         }
 
+        public string ReadString()
+        {
+            string result = "";
+            SeekUntil('\"');
+
+            char last = '\"';
+            while (CanRead())
+            {
+                char current = ReadChar();
+                if (current == '\"' && last != '\\')
+                {
+                    break;
+                }
+
+                result += current;
+                last = current;
+            }
+
+            return result;
+        }
+
     }
 }

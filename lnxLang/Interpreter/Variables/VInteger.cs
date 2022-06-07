@@ -8,8 +8,7 @@ namespace lnxLang.Interpreter.Variables
 {
     internal class VInteger : IVariable
     {
-
-        public string Name { get; set; }
+        
         public int Value { get; set; } = 0;
 
         public VInteger() { }
@@ -22,6 +21,11 @@ namespace lnxLang.Interpreter.Variables
         public void SetValue(string value)
         {
             Value = int.Parse(value);
+        }
+
+        public object GetValue()
+        {
+            return Value;
         }
 
         public void Add(int b)

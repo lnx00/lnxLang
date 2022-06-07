@@ -8,8 +8,7 @@ namespace lnxLang.Interpreter.Variables
 {
     internal class VFloat : IVariable
     {
-
-        public string Name { get; set; }
+        
         public float Value { get; set; } = 0f;
 
         public VFloat() { }
@@ -22,6 +21,11 @@ namespace lnxLang.Interpreter.Variables
         public void SetValue(string value)
         {
             Value = float.Parse(value);
+        }
+
+        public object GetValue()
+        {
+            return Value;
         }
     }
 }

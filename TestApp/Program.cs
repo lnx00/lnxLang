@@ -7,10 +7,10 @@ global a -> int = 1;
 global b -> bool = false;
 
 if (b) {
-    debug 'b was true';
+
 }
 
-debug 'The end';
+debug DUMP;
 ";
 
 Executor executor = new Executor();
