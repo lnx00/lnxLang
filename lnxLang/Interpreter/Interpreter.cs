@@ -8,6 +8,7 @@ using lnxLang.Interpreter.Variables;
 using lnxLang.Parser;
 using lnxLang.Parser.Instructions;
 using lnxLang.Utils;
+using Expression = NCalc.Expression;
 
 namespace lnxLang.Interpreter
 {
@@ -62,8 +63,16 @@ namespace lnxLang.Interpreter
         private bool DoDeclaration(Declaration declaration)
         {
             IVariable newVariable = IVariable.GetFromType(declaration.Type);
-            newVariable.SetValue(declaration.Value);
 
+            if (declaration.Type == ContentType.Integer || declaration.Type == ContentType.Float)
+            {
+                Expression eval = new Expression(declaration.Value);
+                newVariable.SetValue(eval.Evaluate().ToString());
+            }
+            else
+            {
+                newVariable.SetValue(declaration.Value);
+            }
             // TODO: Respect scope
 
             // Add the variable to the corresponding list

@@ -69,6 +69,23 @@ namespace lnxLang.Utils
             return _text[_position];
         }
 
+        /* Peeks the next n characters */
+        public string Peek(int n = 1)
+        {
+            string result = "";
+
+            for (int i = 0; i < n; i++)
+            {
+                if (_position + i >= _text.Length)
+                {
+                    break;
+                }
+                result += _text[_position + i];
+            }
+
+            return result;
+        }
+
         /* Reads until the given character */
         public string ReadUntil(char end)
         {

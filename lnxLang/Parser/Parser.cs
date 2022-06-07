@@ -35,6 +35,15 @@ namespace lnxLang.Parser
             while (reader.CanRead())
             {
                 reader.SeekStart();                 // Go to current line start
+                string prefix = reader.Peek(2);
+                
+                /* Handle comments */
+                if (prefix == "//")
+                {
+                    reader.ReadLine();
+                    continue;
+                }
+
                 string keyword = reader.PeekWord(); // Peek the next word (Keyword)
                 if (keyword == string.Empty)
                 {
@@ -111,7 +120,7 @@ namespace lnxLang.Parser
             {
                 throw new SyntaxErrorException("Invalid syntax for declaration! Expected '=' in: " + line);
             }
-            string value = reader.ReadWord();
+            string value = reader.ReadAll();
             if (string.IsNullOrWhiteSpace(value))
             {
                 throw new Exception("Variable value of '" + name + "' cannot be '" + value + "'");
