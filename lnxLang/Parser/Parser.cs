@@ -60,9 +60,23 @@ namespace lnxLang.Parser
                     {
                         reader.ReadWord(); // Read 'if'
                         string statement = reader.ReadStack('(', ')'); // Read condition
-                        string body = reader.ReadStack('{', '}');
+                        string body = reader.ReadStack('{', '}'); // Read body
 
                         List<IInstruction> bodyInstructions = ParseCode(body, parentVars);
+                        instructions.Add(new Condition(statement, bodyInstructions.Count));
+                        instructions.AddRange(bodyInstructions);
+                        continue;
+                    }
+
+                    case "while":
+                    {
+                        reader.ReadWord();                             // Read 'while'
+                        string statement = reader.ReadStack('(', ')'); // Read condition
+                        string body = reader.ReadStack('{', '}');      // Read body
+
+                        List<IInstruction> bodyInstructions = ParseCode(body, parentVars);
+                        bodyInstructions.Add(new Jump(-bodyInstructions.Count - 1));
+
                         instructions.Add(new Condition(statement, bodyInstructions.Count));
                         instructions.AddRange(bodyInstructions);
                         continue;

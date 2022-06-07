@@ -22,10 +22,7 @@ namespace lnxLang.Interpreter
             while (_currentInstruction < parseResult.Instructions.Count)
             {
                 var instruction = parseResult.Instructions[_currentInstruction];
-                if (!DoInstruction(instruction))
-                {
-                    throw new Exception("Failed to interprete instruction " + _currentInstruction);
-                }
+                DoInstruction(instruction);
 
                 _currentInstruction++;
             }
@@ -33,33 +30,42 @@ namespace lnxLang.Interpreter
             return true;
         }
 
-        private bool DoInstruction(IInstruction instruction)
+        private void DoInstruction(IInstruction instruction)
         {
             if (instruction is Declaration declaration)
             {
-                return DoDeclaration(declaration);
+                DoDeclaration(declaration);
+                return;
             }
 
             if (instruction is Assignment assignment)
             {
-                return DoAssignment(assignment);
+                DoAssignment(assignment);
+                return;
             }
 
             if (instruction is Condition condition)
             {
-                return DoCondition(condition);
+                 DoCondition(condition);
+                 return;
+            }
+
+            if (instruction is Jump jump)
+            {
+                DoJump(jump);
+                return;
             }
 
             if (instruction is Debug debug)
             {
-                return DoDebug(debug);
+                DoDebug(debug);
+                return;
             }
 
             Logger.Warn("Unknown instruction: " + instruction.GetType());
-            return true;
         }
 
-        private bool DoDeclaration(Declaration declaration)
+        private void DoDeclaration(Declaration declaration)
         {
             IVariable newVariable = IVariable.GetFromType(declaration.Type);
 
@@ -83,11 +89,9 @@ namespace lnxLang.Interpreter
             // Add the variable to the corresponding list
             _memory.Variables.Add(declaration.Variable, newVariable);
             Logger.Log("Declaration: " + declaration.Variable + " = " + declaration.Value);
-
-            return true;
         }
 
-        private bool DoAssignment(Assignment assignment)
+        private void DoAssignment(Assignment assignment)
         {
             if (!_memory.Variables.ContainsKey(assignment.Variable))
             {
@@ -111,10 +115,9 @@ namespace lnxLang.Interpreter
             }
 
             Logger.Log("Assignment: " + assignment.Variable + " = " + assignment.Value);
-            return true;
         }
 
-        private bool DoCondition(Condition condition)
+        private void DoCondition(Condition condition)
         {
             Expression eval = new(condition.Statement)
             {
@@ -126,11 +129,14 @@ namespace lnxLang.Interpreter
             {
                 _currentInstruction += condition.Size;
             }
-
-            return true;
         }
 
-        private bool DoDebug(Debug debug)
+        private void DoJump(Jump jump)
+        {
+            _currentInstruction += jump.Offset - 1;
+        }
+
+        private void DoDebug(Debug debug)
         {
             switch (debug.Task)
             {
@@ -151,8 +157,6 @@ namespace lnxLang.Interpreter
                     break;
                 }
             }
-
-            return true;
         }
 
     }

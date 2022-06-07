@@ -3,22 +3,15 @@
 Console.WriteLine("Running lnxLang test...");
 
 string testCode = @"
-global a -> int = 1;
-global b -> bool = false;
-b = true;
+global a -> int = 10;
+global b -> int = 0;
 
-if (b)
-{
-    a = 5;
-    b = false;
-    local c -> bool = true;
-    if (c) { b = true; }
+while (a > 0) {
+    b = b + 5;
+    a = a - 1;
+    debug DUMP;
 }
 
-global d -> int = 10 + a;
-d = a;
-debug DUMP;
-d = d + 1;
 debug DUMP;
 ";
 
