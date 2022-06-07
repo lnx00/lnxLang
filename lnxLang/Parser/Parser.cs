@@ -38,6 +38,8 @@ namespace lnxLang.Parser
                 string prefix = reader.Peek(2);
                 
                 /* Handle comments */
+
+                // Single line comment
                 if (prefix == "//")
                 {
                     reader.ReadLine();
@@ -80,6 +82,7 @@ namespace lnxLang.Parser
                 }
 
                 /* Other keywords */
+
                 // Check if the keyword is a know variable
                 if (_globalVars.Contains(keyword) || localVars.Contains(keyword))
                 {
@@ -170,7 +173,7 @@ namespace lnxLang.Parser
             {
                 throw new SyntaxErrorException("Invalid syntax for assignment! Expected '=' in: " + line);
             }
-            string value = reader.ReadWord();
+            string value = reader.ReadAll();
 
             Logger.Log("Parsed assignment of " + variable + " with value " + value);
             return new Assignment(variable, value);

@@ -11,5 +11,16 @@ namespace lnxLang.Interpreter
 
         public Dictionary<string, IVariable> Variables = new();
 
+        public static Dictionary<string, object> GetSimple(Dictionary<string, IVariable> vars)
+        {
+            Dictionary<string, object> simpleDict = new();
+            foreach (var v in vars)
+            {
+                simpleDict[v.Key] = v.Value.GetValue();
+            }
+
+            return simpleDict;
+        }
+
     }
 }

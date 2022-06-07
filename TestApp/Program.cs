@@ -15,7 +15,10 @@ if (b)
     if (c) { b = true; }
 }
 
-global d -> int = false ? 5 : 3;
+global d -> int = 10 + a;
+d = a;
+debug DUMP;
+d = d + 1;
 debug DUMP;
 ";
 

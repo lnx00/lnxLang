@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using lnxLang.Interpreter.Evaluator;
 using lnxLang.Interpreter.Variables;
 using lnxLang.Parser;
 using lnxLang.Parser.Instructions;
@@ -67,11 +66,15 @@ namespace lnxLang.Interpreter
             if (declaration.Type is ContentType.Integer or ContentType.Float or ContentType.Bool)
             {
                 // Solve logical/math expression
-                Expression eval = new(declaration.Value);
+                Expression eval = new(declaration.Value)
+                {
+                    Parameters = Memory.GetSimple(_memory.Variables)
+                };
                 newVariable.SetValue(eval.Evaluate());
             }
             else
             {
+                // Other declarations (string etc.)
                 newVariable.SetValue(declaration.Value);
             }
 
@@ -92,15 +95,33 @@ namespace lnxLang.Interpreter
             }
 
             var variable = _memory.Variables[assignment.Variable];
-            variable.SetValue(assignment.Value);
-            Logger.Log("Assignment: " + assignment.Variable + " = " + assignment.Value);
+            if (variable is VInteger or VFloat or VBoolean)
+            {
+                // Solve logical/math expression
+                Expression eval = new(assignment.Value)
+                {
+                    Parameters = Memory.GetSimple(_memory.Variables)
+                };
+                variable.SetValue(eval.Evaluate());
+            }
+            else
+            {
+                // Other assignments (string etc.)
+                variable.SetValue(assignment.Value);
+            }
 
+            Logger.Log("Assignment: " + assignment.Variable + " = " + assignment.Value);
             return true;
         }
 
         private bool DoCondition(Condition condition)
         {
-            bool result = Logic.Evaluate(condition.Statement, _memory);
+            Expression eval = new(condition.Statement)
+            {
+                Parameters = Memory.GetSimple(_memory.Variables)
+            };
+
+            bool result = (bool)eval.Evaluate();
             if (!result)
             {
                 _currentInstruction += condition.Size;
