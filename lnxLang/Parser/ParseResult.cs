@@ -10,7 +10,7 @@ namespace lnxLang.Parser
     {
 
         public List<IInstruction> Instructions = new();
-        public List<Function> Functions = new();
+        public Dictionary<string, Function> Functions = new();
 
     }
 }

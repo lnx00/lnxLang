@@ -8,7 +8,7 @@ namespace lnxLang.Parser.Instructions
 {
     internal enum ContentType
     {
-        None, String, Bool, Integer, Float
+        Void, String, Bool, Integer, Float
     }
 
     internal enum AccessScope
@@ -39,7 +39,7 @@ namespace lnxLang.Parser.Instructions
                 "bool" => ContentType.Bool,
                 "int" => ContentType.Integer,
                 "float" => ContentType.Float,
-                _ => ContentType.None
+                _ => ContentType.Void
             };
         }
 

@@ -19,7 +19,8 @@ namespace lnxLang
 
                 // Execute the instructions
                 Logger.Log("Interpreting program...");
-                Interpreter.Interpreter interpreter = new();
+                Interpreter.Interpreter interpreter = new(parseResult);
+                interpreter.Interprete();
                 return true;
             }
             catch (Exception ex)

@@ -13,18 +13,36 @@ namespace lnxLang.Interpreter
 {
     internal class Interpreter
     {
-        private readonly Memory _memory = new();
-        private int _currentInstruction;
+        private readonly Memory _memory; // Program memory
+        private readonly ParseResult _parseResult;
+        private int _current = 0; // Current instruction
 
-        public void Interprete(ParseResult parseResult)
+        public Interpreter(ParseResult parseResult)
         {
-            _currentInstruction = 0;
-            while (_currentInstruction < parseResult.Instructions.Count)
+            _parseResult = parseResult;
+            _memory = new Memory();
+        }
+
+        public Interpreter(ParseResult parseResult, Memory memory)
+        {
+            _parseResult = parseResult;
+            _memory = memory;
+        }
+
+        public void Interprete()
+        {
+            Interprete(_parseResult.Instructions);
+        }
+
+        public void Interprete(List<IInstruction> instructions)
+        {
+            _current = 0;
+            while (_current < instructions.Count)
             {
-                var instruction = parseResult.Instructions[_currentInstruction];
+                var instruction = instructions[_current];
                 DoInstruction(instruction);
 
-                _currentInstruction++;
+                _current++;
             }
         }
 
@@ -148,17 +166,18 @@ namespace lnxLang.Interpreter
                 Parameters = Memory.GetSimple(_memory.Variables)
             };
 
+            // Skip the instructions if the condition is false
             bool result = (bool)eval.Evaluate();
             if (!result)
             {
-                _currentInstruction += condition.Size;
+                _current += condition.Size;
             }
         }
 
         /* Handle instruction jumps */
         private void DoJump(Jump jump)
         {
-            _currentInstruction += jump.Offset - 1;
+            _current += jump.Offset - 1;
         }
 
         /* Handle method calls */
@@ -167,19 +186,27 @@ namespace lnxLang.Interpreter
             Stack<string> callStack = new(call.Path.Reverse());
             string instance = callStack.Pop();
 
+            // Try to call native functions
             switch (instance)
             {
                 case "Console":
                 {
                     Default.Console.Run(callStack, call.Args);
-                    break;
-                }
-
-                default:
-                {
-                    throw new Exception("Cannot call function on: " + instance);
+                    return;
                 }
             }
+
+            // Try to call defined functions
+            if (_parseResult.Functions.ContainsKey(instance))
+            {
+                var function = _parseResult.Functions[instance];
+                Interpreter funcInterpreter = new(_parseResult, _memory);
+                funcInterpreter.Interprete(function.Instructions);
+
+                return;
+            }
+
+            throw new Exception("Cannot call function: " + instance);
         }
 
         /* Handle debug tasks */

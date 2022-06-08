@@ -72,7 +72,7 @@ namespace lnxLang.Parser
                         string body = reader.ReadStack('{', '}');
 
                         List<IInstruction> bodyInstructions = ParseCode(body, parentVars);
-                        _program.Functions.Add(new Function(name, args, Declaration.GetContentType(type), bodyInstructions));
+                        _program.Functions.Add(name, new Function(args, Declaration.GetContentType(type), bodyInstructions));
 
                         Logger.Log("Parsed function '" + name + "' of type " + type);
                         continue;
@@ -175,7 +175,7 @@ namespace lnxLang.Parser
 
             // Get the true variable type
             var trueType = Declaration.GetContentType(type);
-            if (trueType == ContentType.None)
+            if (trueType == ContentType.Void)
             {
                 throw new Exception("Invalid variable type: " + type);
             }

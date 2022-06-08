@@ -20,9 +20,9 @@ namespace lnxLang.Interpreter.Default
             string method = path.Pop();
             switch (method)
             {
-                case "Log":
+                case "Print":
                 {
-                    Log(args);
+                    Print(args);
                     break;
                 }
 
@@ -40,7 +40,7 @@ namespace lnxLang.Interpreter.Default
             }
         }
 
-        private static void Log(string args)
+        private static void Print(string args)
         {
             Reader reader = new(args);
             string msg = reader.ReadString();

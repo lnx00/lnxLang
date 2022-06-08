@@ -9,15 +9,12 @@ namespace lnxLang.Parser
 {
     internal class Function
     {
-
-        public string Name { get; set; }
         public string Args { get; set; }
         public ContentType Type { get; set; }
         public List<IInstruction> Instructions { get; set; }
 
-        public Function(string name, string args, ContentType type, List<IInstruction> instructions)
+        public Function(string args, ContentType type, List<IInstruction> instructions)
         {
-            Name = name;
             Args = args;
             Type = type;
             Instructions = instructions;
