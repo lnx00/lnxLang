@@ -2,9 +2,10 @@
 A simple programming language written in C#
 
 ## Features
-- Global and local variables
+- Global and local variables (string, int, float, bool)
 - if-Statements
 - while-loops
+- functions
 
 ## Example
 ```
