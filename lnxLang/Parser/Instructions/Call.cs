@@ -10,9 +10,9 @@ namespace lnxLang.Parser.Instructions
     {
 
         public string[] Path { get; set; }
-        public string[] Args { get; set; }
+        public string Args { get; set; }
 
-        public Call(string[] path, string[] args)
+        public Call(string[] path, string args)
         {
             Path = path;
             Args = args;

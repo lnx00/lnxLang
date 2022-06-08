@@ -189,16 +189,16 @@ namespace lnxLang.Utils
             return result;
         }
 
-        public string ReadString()
+        public string ReadString(char c = '\"')
         {
             string result = "";
-            SeekUntil('\"');
+            SeekUntil(c);
 
-            char last = '\"';
+            char last = c;
             while (CanRead())
             {
                 char current = ReadChar();
-                if (current == '\"' && last != '\\')
+                if (current == c && last != '\\')
                 {
                     break;
                 }

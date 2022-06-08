@@ -1,5 +1,6 @@
 ﻿using lnxLang.Parser;
 using lnxLang.Utils;
+using NCalc;
 
 namespace lnxLang
 {

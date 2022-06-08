@@ -16,6 +16,13 @@ namespace lnxLang.Utils
             Console.ForegroundColor = ConsoleColor.White;
         }
 
+        public static void Debug(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.WriteLine("[Debug] " + message);
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+
         public static void Warn(string message)
         {
             Console.ForegroundColor = ConsoleColor.DarkYellow;

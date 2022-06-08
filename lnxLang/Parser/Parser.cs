@@ -206,12 +206,11 @@ namespace lnxLang.Parser
         {
             Reader reader = new(line);
             string path = reader.ReadUntil('(');
+            reader.Skip(-1);
             string args = reader.ReadStack('(', ')');
-
             string[] pathArray = path.Split('.');
-            string[] argArray = args.Split(',');
 
-            return new Call(pathArray, argArray);
+            return new Call(pathArray, args);
         }
 
         /* Parses the debug keyword */

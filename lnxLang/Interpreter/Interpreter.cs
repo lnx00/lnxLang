@@ -32,39 +32,53 @@ namespace lnxLang.Interpreter
 
         private void DoInstruction(IInstruction instruction)
         {
-            if (instruction is Declaration declaration)
+            switch (instruction)
             {
-                DoDeclaration(declaration);
-                return;
-            }
+                case Declaration declaration:
+                {
+                    DoDeclaration(declaration);
+                    return;
+                }
 
-            if (instruction is Assignment assignment)
-            {
-                DoAssignment(assignment);
-                return;
-            }
+                case Assignment assignment:
+                {
+                    DoAssignment(assignment);
+                    return;
+                }
 
-            if (instruction is Condition condition)
-            {
-                 DoCondition(condition);
-                 return;
-            }
+                case Condition condition:
+                {
+                    DoCondition(condition);
+                    return;
+                }
 
-            if (instruction is Jump jump)
-            {
-                DoJump(jump);
-                return;
-            }
+                case Jump jump:
+                {
+                    DoJump(jump);
+                    return;
+                }
 
-            if (instruction is Debug debug)
-            {
-                DoDebug(debug);
-                return;
-            }
+                case Call call:
+                {
+                    DoCall(call);
+                    return;
+                }
 
-            Logger.Warn("Unknown instruction: " + instruction.GetType());
+                case Debug debug:
+                {
+                    DoDebug(debug);
+                    return;
+                }
+
+                default:
+                {
+                    Logger.Warn("Unknown instruction: " + instruction.GetType());
+                    break;
+                }
+            }
         }
 
+        /* Handle variable declarations */
         private void DoDeclaration(Declaration declaration)
         {
             IVariable newVariable = IVariable.GetFromType(declaration.Type);
@@ -77,6 +91,11 @@ namespace lnxLang.Interpreter
                     Parameters = Memory.GetSimple(_memory.Variables)
                 };
                 newVariable.SetValue(eval.Evaluate());
+            }
+            else if (declaration.Type is ContentType.String)
+            {
+                // Evaluate string expression
+                newVariable.SetValue(Evaluator.Strings.Evaluate(declaration.Value, _memory));
             }
             else
             {
@@ -91,6 +110,7 @@ namespace lnxLang.Interpreter
             Logger.Log("Declaration: " + declaration.Variable + " = " + declaration.Value);
         }
 
+        /* Handle variable assignments */
         private void DoAssignment(Assignment assignment)
         {
             if (!_memory.Variables.ContainsKey(assignment.Variable))
@@ -108,6 +128,11 @@ namespace lnxLang.Interpreter
                 };
                 variable.SetValue(eval.Evaluate());
             }
+            else if (variable is VString)
+            {
+                // Evaluate string expression
+                variable.SetValue(Evaluator.Strings.Evaluate(assignment.Value, _memory));
+            }
             else
             {
                 // Other assignments (string etc.)
@@ -117,6 +142,7 @@ namespace lnxLang.Interpreter
             Logger.Log("Assignment: " + assignment.Variable + " = " + assignment.Value);
         }
 
+        /* Handle conditions (if, while) */
         private void DoCondition(Condition condition)
         {
             Expression eval = new(condition.Statement)
@@ -131,29 +157,52 @@ namespace lnxLang.Interpreter
             }
         }
 
+        /* Handle instruction jumps */
         private void DoJump(Jump jump)
         {
             _currentInstruction += jump.Offset - 1;
         }
 
+        /* Handle method calls */
+        private void DoCall(Call call)
+        {
+            Stack<string> callStack = new(call.Path.Reverse());
+            string instance = callStack.Pop();
+
+            switch (instance)
+            {
+                case "Console":
+                {
+                    Default.Console.Run(callStack, call.Args);
+                    break;
+                }
+
+                default:
+                {
+                    throw new Exception("Cannot call function on: " + instance);
+                }
+            }
+        }
+
+        /* Handle debug tasks */
         private void DoDebug(Debug debug)
         {
             switch (debug.Task)
             {
                 case DebugTask.Dump:
                 {
-                    Logger.Log("### Variable dump ###");
+                    Logger.Debug("### Variable dump ###");
                     foreach (var variable in _memory.Variables)
                     {
-                        Logger.Log(variable.Key + " = " + variable.Value.GetValue());
+                        Logger.Debug(variable.Key + " = " + variable.Value.GetValue());
                     }
-                    Logger.Log("#####################");
+                    Logger.Debug("#####################");
                     break;
                 }
 
                 default:
                 {
-                    Logger.Warn("Unknown debug task");
+                    Logger.Debug("Unknown debug task");
                     break;
                 }
             }
