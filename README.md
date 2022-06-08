@@ -3,6 +3,8 @@ A simple programming language written in C#
 
 ## Features
 - Global and local variables
+- if-Statements
+- while-loops
 
 ## Example
 ```
