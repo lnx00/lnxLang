@@ -26,6 +26,12 @@ namespace lnxLang.Interpreter.Default
                     break;
                 }
 
+                case "Read":
+                {
+                    Read();
+                    break;
+                }
+
                 case "Clear":
                 {
                     Clear();
@@ -40,6 +46,11 @@ namespace lnxLang.Interpreter.Default
             string msg = reader.ReadString();
 
             System.Console.WriteLine(msg);
+        }
+
+        private static void Read()
+        {
+            System.Console.ReadLine();
         }
 
         private static void Clear()

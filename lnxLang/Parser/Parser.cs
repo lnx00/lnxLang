@@ -57,6 +57,27 @@ namespace lnxLang.Parser
                 /* Keywords that will contain sub-code { } */
                 switch (keyword)
                 {
+                    case "func":
+                    {
+                        reader.ReadWord(); // Read 'func'
+                        string name = reader.ReadUntil('(');
+                        reader.Skip(-1);
+                        string args = reader.ReadStack('(', ')');
+                        reader.Skip();
+                        if (reader.ReadWord() != "->")
+                        {
+                            throw new SyntaxErrorException("Invalid syntax for function! Expected '->' in: " + reader.GetPosition());
+                        }
+                        string type = reader.ReadWord();
+                        string body = reader.ReadStack('{', '}');
+
+                        List<IInstruction> bodyInstructions = ParseCode(body, parentVars);
+                        _program.Functions.Add(new Function(name, args, Declaration.GetContentType(type), bodyInstructions));
+
+                        Logger.Log("Parsed function '" + name + "' of type " + type);
+                        continue;
+                    }
+
                     case "if":
                     {
                         reader.ReadWord(); // Read 'if'
@@ -206,7 +227,7 @@ namespace lnxLang.Parser
         {
             Reader reader = new(line);
             string path = reader.ReadUntil('(');
-            reader.Skip(-1);
+            reader.Skip(-1); // We need to include the '('
             string args = reader.ReadStack('(', ')');
             string[] pathArray = path.Split('.');
 

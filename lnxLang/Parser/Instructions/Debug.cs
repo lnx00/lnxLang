@@ -9,7 +9,7 @@ namespace lnxLang.Parser.Instructions
 
     internal enum DebugTask
     {
-        None, Dump
+        None, Dump, Stop
     }
 
     internal class Debug : IInstruction
@@ -27,6 +27,7 @@ namespace lnxLang.Parser.Instructions
             return task switch
             {
                 "DUMP" => DebugTask.Dump,
+                "STOP" => DebugTask.Stop,
                 _ => DebugTask.None
             };
         }

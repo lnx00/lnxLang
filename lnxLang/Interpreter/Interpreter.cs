@@ -16,7 +16,7 @@ namespace lnxLang.Interpreter
         private readonly Memory _memory = new();
         private int _currentInstruction;
 
-        public bool Interprete(ParseResult parseResult)
+        public void Interprete(ParseResult parseResult)
         {
             _currentInstruction = 0;
             while (_currentInstruction < parseResult.Instructions.Count)
@@ -26,8 +26,6 @@ namespace lnxLang.Interpreter
 
                 _currentInstruction++;
             }
-
-            return true;
         }
 
         private void DoInstruction(IInstruction instruction)
@@ -198,6 +196,12 @@ namespace lnxLang.Interpreter
                     }
                     Logger.Debug("#####################");
                     break;
+                }
+
+                case DebugTask.Stop:
+                {
+                    Logger.Debug("Stopping execution");
+                    throw new Exception("Execution was manually stopped");
                 }
 
                 default:

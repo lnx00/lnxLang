@@ -20,7 +20,7 @@ namespace lnxLang
                 // Execute the instructions
                 Logger.Log("Interpreting program...");
                 Interpreter.Interpreter interpreter = new();
-                return interpreter.Interprete(parseResult);
+                return true;
             }
             catch (Exception ex)
             {
